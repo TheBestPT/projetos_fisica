@@ -12,7 +12,6 @@ set ytics nomirror
 set y2tics
 set y2label "v_{x},v_{y} (m/s)"
 
-
 #CI
 xo = 0
 vo = 10 # m/s
@@ -67,16 +66,6 @@ str_vo = sprintf("v_{o} = %0.2f º", vo)
 str_xo = sprintf("x_{o} = %0.2f º", xo)
 str_alfa = sprintf("{/Symbol a} = %0.2f º", alfa)
 
-set label 1 str_tmax at tmax, ymax*1.3 font ",8"
-set label 2 str_xmax at tmax, ymax*1.2 font ",8"
-set label 3 str_ymax at tmax, ymax*1.1 font ",8"
-set label 4 str_tv at tv*.8, ymax*.1 font ",8"
-set label 5 str_xa at tv*.4, ymax*.1 font ",8"
-set label 6 str_vi at graph 1.3, .46 font ",8"
-set label 7 str_gama at graph 1.3, .5 font ",8"
-set label 8 str_vo at graph 1.3, .34 font ",8"
-set label 9 str_xo at graph 1.3, .26 font ",8"
-set label 10 str_alfa at graph 1.3, .18 font ",8"
 
 
 
@@ -89,22 +78,17 @@ set xrange[0:tv]
 
 
 
-plot x(t) ,\
-     y(t), \
-     vx(t) axes x1y2 w l lw 1.5, \
-     vy(t) axes x1y2 w  l lw 1.5
+dt = .01
 
- pause(-1)
+do for[n=0:360/dt]{
+    t = n*dt
+    if(t > tv) { exit } #para quando o x da janela acabar
+    set object 1 circle at t, y(t) size .05 # FUNCIONA MAS NAO E PARAMETRICO set object 1 circle at t, y(t) size .05
+    # set object 2 polygon from y(t) to y(t/.2) size .1
+    set arrow 2 from t, y(t) length .1
+    plot y(t), x(t)
+}
 
 
- set parametric
- set trange[0:tv]
- set autoscale
- unset y2tics
- set ytics mirror
- set xlabel "x (m)"
- set ylabel "y (m)"
- set y2label ""
- unset label
- unset key 
- plot x(t), y(t)   
+
+
